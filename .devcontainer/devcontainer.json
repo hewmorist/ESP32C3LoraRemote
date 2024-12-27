@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/universal
+{
+	"name": "Ubuntu 22.04",
+	
+	
+	"build": {
+			// Path is relative to the devcontainer.json file.
+			"dockerfile": "Dockerfile"
+			},
+
+  	"features": {
+    		
+  				},
+
+
+	"mounts": [
+		
+	],
+	"customizations": {
+		"vscode": {
+			"settings": {
+			
+			},
+			"extensions": [
+				"ms-vscode.cpptools"
+			]
+		},
+		"codespaces": {
+			"settings": {
+			
+			},
+			"extensions": [
+				"ms-vscode.cpptools"
+			]
+		}
+	},
+	
+	"runArgs": ["--privileged"],
+
+
+	// More info: https://aka.ms/dev-containers-non-root.
+	 "remoteUser": "vscode"
+}
