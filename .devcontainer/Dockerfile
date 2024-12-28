@@ -9,7 +9,7 @@ udev \
 mc \
 && apt-get clean
 
-RUN pip3 install platformio
+# RUN pip3 install platformio
 
 # Setup to get Midnight Commander to exit in current directory
 RUN echo "alias mc='. /usr/lib/mc/mc-wrapper.sh'" >> home/vscode/.bashrc
