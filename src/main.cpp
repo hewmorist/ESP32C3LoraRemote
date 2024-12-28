@@ -24,6 +24,8 @@
 //Will wake up when pins 15 or 12 go HIGH
 #define DEEP_SLEEP_GPIO_ANY_HIGH
 
+gpio_num_t LID_GPIO = (gpio_num_t)LID;
+gpio_num_t DOOR_GPIO = (gpio_num_t)DOOR;
 
 // keep track of how many times we've come out of deep sleep
 RTC_DATA_ATTR int sleep_count = 0;
@@ -152,13 +154,12 @@ void enter_sleep()
   Serial.println("1");
   delay(1000);
 
-#ifdef DEEP_SLEEP_GPIO_ANY_HIGH
-  pinMode(GPIO_NUM_15, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_15);
-  pinMode(GPIO_NUM_12, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_12);
-  esp_deep_sleep_enable_gpio_wakeup((1 << GPIO_NUM_12) | (1 << GPIO_NUM_15), ESP_GPIO_WAKEUP_GPIO_HIGH);
-#endif
+
+  pinMode(LID, INPUT_PULLDOWN);
+  gpio_hold_en(LID_GPIO);
+  pinMode(DOOR, INPUT_PULLDOWN);
+  gpio_hold_en(DOOR_GPIO);
+  esp_deep_sleep_enable_gpio_wakeup((1 << LID_GPIO) | (1 << DOOR_GPIO), ESP_GPIO_WAKEUP_GPIO_HIGH);
 
   esp_deep_sleep_start();
 }
@@ -174,13 +175,11 @@ void enter_full_sleep()
   Serial.println("1");
   delay(1000);
 
-#ifdef DEEP_SLEEP_GPIO_ANY_HIGH
-  pinMode(GPIO_NUM_15, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_15);
-  pinMode(GPIO_NUM_12, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_12);
-  esp_deep_sleep_enable_gpio_wakeup((1 << GPIO_NUM_15), ESP_GPIO_WAKEUP_GPIO_HIGH);
-#endif
+  pinMode(LID, INPUT_PULLDOWN);
+  gpio_hold_en(LID_GPIO);
+  pinMode(DOOR, INPUT_PULLDOWN);
+  gpio_hold_en(DOOR_GPIO);
+  esp_deep_sleep_enable_gpio_wakeup((1 << DOOR_GPIO), ESP_GPIO_WAKEUP_GPIO_HIGH); //Only wake if Door is opened
 
   esp_deep_sleep_start();
 }
@@ -196,13 +195,12 @@ void enter_empty_sleep()
   Serial.println("1");
   delay(1000);
 
-#ifdef DEEP_SLEEP_GPIO_ANY_HIGH
-  pinMode(GPIO_NUM_15, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_15);
-  pinMode(GPIO_NUM_12, INPUT_PULLDOWN);
-  gpio_hold_en(GPIO_NUM_12);
-  esp_deep_sleep_enable_gpio_wakeup((1 << GPIO_NUM_12), ESP_GPIO_WAKEUP_GPIO_HIGH);
-#endif
+  pinMode(LID, INPUT_PULLDOWN);
+  gpio_hold_en(LID_GPIO);
+  pinMode(DOOR, INPUT_PULLDOWN);
+  gpio_hold_en(DOOR_GPIO);
+  esp_deep_sleep_enable_gpio_wakeup((1 << LID_GPIO), ESP_GPIO_WAKEUP_GPIO_HIGH); //Only wake if LID is opened
+
 
   esp_deep_sleep_start();
 }
