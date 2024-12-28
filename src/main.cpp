@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
-//#include <driver/rtc_io.h>
+#include <stdio.h>
+#include "driver/uart.h"
 #include "driver/gpio.h"
 #include "esp_sleep.h"
 
@@ -209,7 +210,33 @@ void enter_empty_sleep()
 void setup(void)
 {
   Serial.begin(9600);
-  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+
+  //Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+
+// Define UART configuration
+const uart_config_t uart1_config = {
+        .baud_rate = 9600,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_APB,
+    };
+
+// Configure UART1 parameters
+    uart_param_config(UART_NUM_1, &uart1_config);
+
+    // Set UART1 RX and TX pins
+    uart_set_pin(UART_NUM_1, GPIO_NUM_7, GPIO_NUM_6, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+
+    // Install UART driver
+    uart_driver_install(UART_NUM_1, 1024, 0, 0, NULL, 0);
+
+    // Example: Send a message over UART1
+    const char *test_message = "Hello from UART1!\n";
+    uart_write_bytes(UART_NUM_1, test_message, strlen(test_message));
+
+
   delay(1000);
   // we've just started up - show the reason why
   show_wake_reason();
