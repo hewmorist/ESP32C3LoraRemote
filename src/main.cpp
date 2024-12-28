@@ -4,9 +4,6 @@
 #include "driver/gpio.h"
 #include "esp_sleep.h"
 
-// Built in button GPIO - adjust for your board
-#define BUTTON_GPIO GPIO_NUM_35
-
 #define M0 0
 #define M1 1
 #define AUX 2
@@ -73,11 +70,11 @@ void receive() {
 void show_gpio_wakeup_reason()
 {
 
-  uint64_t ext1_waskeup_reason = esp_sleep_get_gpio_wakeup_status();
+  uint64_t gpio_wakeup_reason = esp_sleep_get_gpio_wakeup_status();
 
   for (int i = 0; i < GPIO_NUM_MAX; i++)
   {
-    if (ext1_waskeup_reason & (1ULL << i))
+    if (gpio_wakeup_reason & (1ULL << i))
     {
       Serial.printf("GPIO %d\n", i);
       if (i == LID) {
