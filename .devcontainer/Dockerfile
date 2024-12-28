@@ -11,8 +11,6 @@ mc \
 
 RUN pip3 install platformio
 
-RUN pio init
-
 # Setup to get Midnight Commander to exit in current directory
 RUN echo "alias mc='. /usr/lib/mc/mc-wrapper.sh'" >> home/vscode/.bashrc
 
