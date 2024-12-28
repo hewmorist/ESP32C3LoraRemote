@@ -27,7 +27,7 @@ COPY 99-usb-uart.rules /etc/udev/rules.d
 #    chmod 666 /dev/ttyUSB0
 
  COPY entrypoint.sh /entrypoint.sh
- COPY setusbport.sh /workspaces/ESP32C3LoraRemote/setusbport.sh
+ COPY setusbport.sh /workspaces/ESP32C3LoraRemote/
 
 # Assign the RemoteUser to the dialout group to get access to the USB port
 # RUN usermod -a -G dialout vscode
