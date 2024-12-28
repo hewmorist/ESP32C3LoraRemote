@@ -27,6 +27,7 @@
 
 gpio_num_t LID_GPIO = (gpio_num_t)LID;
 gpio_num_t DOOR_GPIO = (gpio_num_t)DOOR;
+gpio_num_t LED_GPIO = (gpio_num_t)LED;
 
 // keep track of how many times we've come out of deep sleep
 RTC_DATA_ATTR int sleep_count = 0;
@@ -55,6 +56,9 @@ RTC_DATA_ATTR unsigned long transmissionTime = millis();
 RTC_DATA_ATTR int retransmissions = 0;
 RTC_DATA_ATTR bool opening_pressed = false;
 RTC_DATA_ATTR bool door_pressed = false;
+RTC_DATA_ATTR bool led_on = false;
+
+
 
 void receive() {
   byte _receivedCode = 0;
@@ -115,6 +119,7 @@ void show_wake_reason()
 {
   sleep_count++;
   auto cause = esp_sleep_get_wakeup_cause();
+
   switch (cause)
   {
   case ESP_SLEEP_WAKEUP_UNDEFINED:
@@ -123,8 +128,8 @@ void show_wake_reason()
   case ESP_SLEEP_WAKEUP_EXT0:
     Serial.println("Wakeup reason: EXT0");
     break;
-  case ESP_SLEEP_WAKEUP_EXT1:
-    Serial.println("Wakeup reason: EXT1");
+  case ESP_SLEEP_WAKEUP_GPIO:
+    Serial.println("Wakeup reason: GRIO");
     show_gpio_wakeup_reason();
     break;
   case ESP_SLEEP_WAKEUP_TIMER:
@@ -207,35 +212,12 @@ void enter_empty_sleep()
 }
 
 
-void setup(void)
+void setup()
 {
-  Serial.begin(9600);
 
-  //Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
+Serial.begin(9600);
 
-// Define UART configuration
-const uart_config_t uart1_config = {
-        .baud_rate = 9600,
-        .data_bits = UART_DATA_8_BITS,
-        .parity = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .source_clk = UART_SCLK_APB,
-    };
-
-// Configure UART1 parameters
-    uart_param_config(UART_NUM_1, &uart1_config);
-
-    // Set UART1 RX and TX pins
-    uart_set_pin(UART_NUM_1, GPIO_NUM_7, GPIO_NUM_6, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-
-    // Install UART driver
-    uart_driver_install(UART_NUM_1, 1024, 0, 0, NULL, 0);
-
-    // Example: Send a message over UART1
-    const char *test_message = "Hello from UART1!\n";
-    uart_write_bytes(UART_NUM_1, test_message, strlen(test_message));
-
+  Serial1.begin(9600, SERIAL_8N1, RXD2, TXD2);
 
   delay(1000);
   // we've just started up - show the reason why
@@ -246,35 +228,34 @@ const uart_config_t uart1_config = {
   pinMode(AUX, INPUT_PULLUP);
   pinMode(LED, OUTPUT);
 
-  digitalWrite(LED, HIGH);
 
 // Check if first setup
-    if(programStatus == boxinit){
-      // setup the radio
-        Serial.println("Setting up radio");
-        digitalWrite(M0, HIGH);
-        digitalWrite(M1, HIGH);
-        byte data[] = { 0xC0, 0x0, 0x1, 0x1D, 0x34, 0x40 }; // 914MHz, Chan 1, 9.6k uart, 19.2k air
-        delay(100);
-        for (unsigned int i = 0; i < sizeof(data); i++) {
-            Serial1.write(data[i]);
-            Serial.println(data[i], HEX);
-        }
+      if(programStatus == boxinit)
+    {
+        // setup the radio
+      Serial.println("Setting up radio");
+      digitalWrite(M0, HIGH);
+      digitalWrite(M1, HIGH);
+      byte data[] = { 0xC0, 0x0, 0x1, 0x1D, 0x34, 0x40 }; // 914MHz, Chan 1, 9.6k uart, 19.2k air
+      delay(100);
+      for (unsigned int i = 0; i < sizeof(data); i++) {
+          Serial1.write(data[i]);
+          Serial.println(data[i], HEX);
+      }
+
+      delay(100);
+      digitalWrite(M0, LOW);
+      digitalWrite(M1, LOW);
+      Serial1.write(EMPTY);
+      Serial1.flush();
 
 
-    } else {
-        
 
     }
 
-    delay(100);
-    digitalWrite(M0, LOW);
-    digitalWrite(M1, LOW);
-    Serial1.write(EMPTY);
-    Serial1.flush();
+} 
 
-  
-}
+
 
 void loop()
 {
@@ -286,6 +267,12 @@ void loop()
       opening_pressed = false;
       door_pressed = false;
       programStatus = boxready;
+
+    
+    digitalWrite(LED, LOW);
+    led_on = true;
+    gpio_hold_en(LED_GPIO);
+
       enter_sleep();
       break;
 
@@ -295,6 +282,11 @@ void loop()
       opening_pressed = false;
       door_pressed = false;
       programStatus = boxready;
+
+      digitalWrite(LED, HIGH);
+      led_on = false;
+      gpio_hold_en(LED_GPIO);
+
       enter_sleep();
       break;
 
