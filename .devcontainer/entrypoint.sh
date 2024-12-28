@@ -8,5 +8,3 @@ sudo service udev restart
 
 # make it so mc exits in current dir
 source home/vscode/.bashrc
-
-platformio init
