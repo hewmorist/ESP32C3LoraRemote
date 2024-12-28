@@ -7,7 +7,7 @@
 
 #define M0 0
 #define M1 1
-#define AUX 2
+#define AUX 3
 #define LED 8
 
 #define TXD2 7 
