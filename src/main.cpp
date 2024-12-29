@@ -25,7 +25,7 @@
 //define LED
 CRGB leds[NUM_LEDS];
 
-//Will wake up when pins 15 or 12 go HIGH
+//Will wake up when "LID" or "DOOR" pins go HIGH
 #define DEEP_SLEEP_GPIO_ANY_HIGH
 
 gpio_num_t LID_GPIO = (gpio_num_t)LID;
@@ -126,7 +126,7 @@ void show_wake_reason()
   switch (cause)
   {
   case ESP_SLEEP_WAKEUP_UNDEFINED:
-    Serial.println("Undefined"); // most likely a boot up after a reset or power cycly
+    Serial.println("Undefined"); // most likely a boot up after a reset or power cycle
     break;
   case ESP_SLEEP_WAKEUP_EXT0:
     Serial.println("Wakeup reason: EXT0");
