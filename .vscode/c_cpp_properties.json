@@ -23,35 +23,11 @@
                 "${env:HOME}/.platformio/packages/framework-arduinoespressif32",
                 "${workspaceFolder}/.pio/libdeps"                          
                 ]
-            },
-            "defines": [
-                "PLATFORMIO=60116",
-                "ARDUINO_ESP32C3_DEV",
-                "HAVE_CONFIG_H",
-                "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"",
-                "UNITY_INCLUDE_CONFIG_H",
-                "WITH_POSIX",
-                "_GNU_SOURCE",
-                "IDF_VER=\"v4.4.7-dirty\"",
-                "ESP_PLATFORM",
-                "_POSIX_READER_WRITER_LOCKS",
-                "ARDUINO_ARCH_ESP32",
-                "ESP32",
-                "F_CPU=160000000L",
-                "ARDUINO=10812",
-                "ARDUINO_VARIANT=\"esp32c3\"",
-                "ARDUINO_BOARD=\"Espressif ESP32-C3-DevKitC-02\"",
-                "ARDUINO_PARTITION_default",
-                ""
-            ],
-            "cStandard": "gnu99",
-            "cppStandard": "gnu++11",
-            "compilerPath": "/home/vscode/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-gcc",
-            "compilerArgs": [
-                "-march=rv32imc",
-                ""
-            ]
+            }
+            
+            
+            
         }
-    ],
-    "version": 4
+    ]
+   
 }
