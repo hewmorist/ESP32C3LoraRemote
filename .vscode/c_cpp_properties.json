@@ -6,7 +6,7 @@
 {
     "configurations": [
         {
-            "name": "PlatformIO",
+            "name": "PIO_ESP32C3",
             "includePath": [    
             "${workspaceFolder}/src",
             "${workspaceFolder}/include",
